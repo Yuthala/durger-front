@@ -5,16 +5,16 @@ import Cart from './components/Cart/Cart';
 
 const { getData } = require("./db/db");
 const foods = getData();
-const {tg, queryId} = window.Telegram.WebApp;
+//const {tg, queryId} = window.Telegram.WebApp;
 
 
 function App() {
 
   const [cartItems, setCartItems] = useState([]);
 
-  useEffect (() => {
-    tg.ready();
-  }, []);
+  // useEffect (() => {
+  //   tg.ready();
+  // }, []);
 
   // функция добавления товара в корзину
   const onAdd = (food) => {
@@ -49,29 +49,29 @@ function App() {
     }
   };
 
-  const onCheckout = () => {
-    tg.MainButton.text = "Оплатить";
-    tg.MainButton.show();
+  // const onCheckout = () => {
+  //   tg.MainButton.text = "Оплатить";
+  //   tg.MainButton.show();
 
-    const data = {
-      products: cartItems,
-      queryId
-    }
-    fetch('http://localhost:8000/web-data', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-  })
-}
+//     const data = {
+//       products: cartItems,
+//       queryId
+//     }
+//     fetch('http://localhost:8000/web-data', {
+//       method: 'POST',
+//       headers: {
+//           'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(data)
+//   })
+// }
 
-useEffect( ()=> {
-  tg.onEvent('mainButtonClicked', onCheckout)
-    return ()=> {
-      tg.offEvent('mainButtonClicked', onCheckout)
-    }
-  }, [onCheckout])
+// useEffect( ()=> {
+//   tg.onEvent('mainButtonClicked', onCheckout)
+//     return ()=> {
+//       tg.offEvent('mainButtonClicked', onCheckout)
+//     }
+//   }, [onCheckout])
 
   return (
     <>
@@ -81,7 +81,13 @@ useEffect( ()=> {
 
         <div className="cards__container"> 
             {foods.map (food => { 
-              return <Card food={food} key={food.id} onAdd={onAdd} onRemove={onRemove} onCheckout={onCheckout}/>
+              return <Card 
+              food={food} 
+              key={food.id} 
+              onAdd={onAdd} 
+              onRemove={onRemove} 
+              //onCheckout={onCheckout}
+              />
             })}
         </div>
     </>
