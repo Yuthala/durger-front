@@ -1,14 +1,20 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Card from './components/Card/Card';
 import Cart from './components/Cart/Cart';
 
 const { getData } = require("./db/db");
 const foods = getData();
+const {tg, queryId} = window.Telegram.WebApp;
+
 
 function App() {
 
   const [cartItems, setCartItems] = useState([]);
+
+  useEffect (() => {
+    tg.ready();
+  }, []);
 
   // функция добавления товара в корзину
   const onAdd = (food) => {
@@ -26,6 +32,7 @@ function App() {
     }
   };
 
+
   //функция убрать товар из корзины
   const onRemove = (food) => {
     const exist = cartItems.find((x) => x.id === food.id);
@@ -42,6 +49,30 @@ function App() {
     }
   };
 
+  const onCheckout = () => {
+    tg.MainButton.text = "Оплатить";
+    tg.MainButton.show();
+
+    const data = {
+      products: cartItems,
+      queryId
+    }
+    fetch('http://localhost:8000/web-data', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+  })
+}
+
+useEffect( ()=> {
+  tg.onEvent('mainButtonClicked', onCheckout)
+    return ()=> {
+      tg.offEvent('mainButtonClicked', onCheckout)
+    }
+  }, [onCheckout])
+
   return (
     <>
         <h1 className="heading">Сделать заказ</h1>
@@ -50,7 +81,7 @@ function App() {
 
         <div className="cards__container"> 
             {foods.map (food => { 
-              return <Card food={food} key={food.id} onAdd={onAdd} onRemove={onRemove}/>
+              return <Card food={food} key={food.id} onAdd={onAdd} onRemove={onRemove} onCheckout={onCheckout}/>
             })}
         </div>
     </>

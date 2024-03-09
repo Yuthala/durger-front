@@ -26,7 +26,7 @@ function Card({food, onAdd, onRemove}) {
 
 		{/* изображение */}
 		<div className="image__container">
-			<img src={Image} alt={title} />
+			<img src={Image} alt={title} key={id} />
 		</div>
 
 		{/* наименование + цена */}
@@ -39,7 +39,7 @@ function Card({food, onAdd, onRemove}) {
 			<Button title={'+'} type={'add'} onClick={handleIncrement} />
 
 			{count !== 0 ? (
-				<Button title={'-'} type={'remove'} onClick={handleDecrement}/>
+			<Button title={'-'} type={'remove'} onClick={handleDecrement}/>
 			) : ""}
 		</div>
 	</div>
