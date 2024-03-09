@@ -1,15 +1,18 @@
 import './App.css';
 import Button from './components/Button/Button';
-
+import Card from './components/Card/Card';
 const { getData } = require("./db/db");
+const foods = getData();
 
 function App() {
   return (
     <>
-        Hello world
-        <Button title={'ADD'} disable="false" type={'add'}/>
-        <Button title={'REMOVE'} disable="false" type={'remove'}/>
-        <Button title={'CHECKOUT'} disable="false" type={'checkout'}/>
+        <h1 className="heading">Сделать заказ</h1>
+        <div className="cards__container"> 
+            {foods.map (food => { 
+              return <Card food={food} key={food.id}/>
+            })}
+        </div>
     </>
   );
 }
